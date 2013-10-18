@@ -1,0 +1,8 @@
+---
+applications:
+- name: foundry-rails
+  memory: 512M
+  instances: 1
+  host: foundry-rails
+  domain: cfapps.io
+  path: .

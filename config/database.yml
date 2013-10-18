@@ -1,0 +1,38 @@
+<%
+  if Rails.env.production?
+    mydb = JSON.parse(ENV['VCAP_SERVICES'])["postgresql-rails"]
+    credentials = mydb.first["credentials"]
+  else
+    credentials = {}
+  end
+%>
+
+common: &shared
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  username: juergen
+  password: 
+  min_messages: WARNING
+  
+development:
+  <<: *shared
+  database: foundry_rails_development
+
+test: &test
+  <<: *shared
+  database: foundry_rails_test
+
+cucumber:
+  <<: *test
+
+production:
+  adapter: pg
+  encoding: utf8
+  reconnect: false
+  pool: 5
+  host: <%= credentials["host"] %>
+  username: <%= credentials["username"] %>
+  password: <%= credentials["password"] %>
+  database: <%= credentials["database"] %>
+  port: <%= credentials["port"] %>
